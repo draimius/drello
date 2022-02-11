@@ -1,30 +1,112 @@
 'use strict';
-//so what needs to happen inregards to the first elemetns and bing able to add more then
-//-be able to scoll horizontally with multiple list of item that also cn fill till bettom of screen
-//--and be able to scoll the list up and down when have lost of listed items
-//be able to add and delete each list item and each list
-//adding color choosing and card ect.. not really big deal maybe just some colors like list, item, background
-//hjow can i identify which list in target
-//have to be able to create delete while list and list items
-//be able to edit list title , list item
-//and be able to move the list items to diff order
-// we know the action we want to be able to do. now how do we achieve those?????/
 
+//be albe to add list delete list
+// add list item delete list item
+// edit text in both list items and list titles
+
+// ============================
 class Kanban {
   constructor() {}
-  //edit text for target title or list item
-  //move list item within its own list
-  //move list item to another list
-  //add new list item
   //add new list
+  //add new list item
   //delete list
   //delete list item
-  //and i think that pretty much it for all the functionalities really
-}
-//i think for the floats we'll maybe do that in another file
+  //edit text for target title or list item
 
-//
-//
-//
-//what const will i need to create here what dom object do i need
-//also we arent gonna start with a list on screen so need a add list button on screen
+  //*****and i think that pretty much it for all the functionalities really
+}
+
+const addList = document.querySelector('#add-list-button');
+const addItemButtons = document.querySelectorAll('.add-button');
+const newCardInput = document.querySelectorAll('.new-card');
+
+// VARS, EVENTS AND NEW INSTANCE
+const trello = new Kanban();
+
+addList.addEventListener('click', (e) => {
+  console.log('clicky click clak');
+  addListPopUp();
+});
+
+function addListPopUp() {
+  if (![...addList.parentElement.classList].includes('popUp')) {
+    addList.parentElement.classList.add('popUp');
+    const inputCard = document.createElement('input');
+    inputCard.innerHTML = '<input type="text" />';
+    addList.appendChild(inputCard, addList);
+    //testing
+    let xButton = document.createElement('button');
+    xButton.innerHTML = '<button>X</button>';
+    addList.appendChild(xButton);
+    xButton.isner;
+  } else {
+    console.log('working??');
+  }
+  //now could just have made with clases that will always apply to make look nice
+  // then need way to capture and submit the input text/value
+  // and create the list template with value passed in as the list title
+  //??popup when clicked (in focus) when we click off it closes if we hit x button it closes
+  // else if we hit submit button then that when we make the list with title w/text value
+}
+// console.log(inputCard);
+
+// ===================================================================
+// ===================================================================
+// ===================================================================
+// ALL DRAG AND DROP VARS, FUNCTION AND LISTENERS
+// ===================================================================
+//capture all draggable items and containers
+const draggables = document.querySelectorAll('.draggable');
+const dragCointainers = document.querySelectorAll('.item-container');
+
+//listen for drag on item
+draggables.forEach((item) => {
+  item.addEventListener('dragstart', () => {
+    item.classList.add('dragging');
+  });
+  //listent for drop on item
+  item.addEventListener('dragend', () => {
+    item.classList.remove('dragging');
+  });
+});
+
+//listen for drop in cointainer
+dragCointainers.forEach((container) => {
+  container.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    //target element we'll be drop after(top of)
+    const afterElement = getDragAfterElement(container, e.clientY);
+    //if do target can grab things other then item and create issues
+    const dragItem = document.querySelector('.dragging');
+    //if exist drop before elements else just in container
+    if (afterElement === null) {
+      container.appendChild(dragItem);
+    } else {
+      container.insertBefore(dragItem, afterElement);
+    }
+  });
+});
+
+//the container where want to drop into and the position in cointainers list
+function getDragAfterElement(container, y) {
+  //grab every element we are NOT currently dragging
+  const draggableElements = [
+    ...container.querySelectorAll('.draggable:not(.dragging)'),
+  ];
+
+  //reduce very useful function used here like never seen before its clever
+  return draggableElements.reduce(
+    (closest, child) => {
+      //really cool funciton info
+      const box = child.getBoundingClientRect();
+      //to base it on the center of the elements and not its top and bottom
+      const offset = y - box.top - box.height / 2;
+      if (offset < 0 && offset > closest.offset) {
+        return { offset: offset, element: child };
+      } else {
+        return closest;
+      }
+    },
+    { offset: Number.NEGATIVE_INFINITY }
+  ).element;
+}

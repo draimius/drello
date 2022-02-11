@@ -11,7 +11,7 @@ body {
   width: 100vw;
   height: 100vh;
   font-family: 'Courier New', Courier, monospace;
-  /* overflow-y: hidden; */
+  overflow-y: hidden;
   color: white;
 }
 
@@ -21,26 +21,37 @@ body {
   background-color: black;
 }
 #frame {
-  width: 100%;
   display: flex;
   flex-direction: row;
   height: auto;
   background-color: rgb(168, 100, 100);
 }
-/* represents the list */
+/* represents the while list component */
 .list {
-  margin: 50px 3px;
-  padding: 10px 5px;
+  margin: 50px 3px 50px;
+  padding: 10px;
   box-sizing: border-box;
   min-width: 265px;
-  /* max-width: 265px; */
+  width: 265px;
   height: fit-content;
+  max-height: 90vh;
   background-color: rgb(34, 56, 49);
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  border-radius: 3px;
+  border-radius: 5px;
+}
+/* represent list container(houses all li's) */
+.item-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-x: hidden;
+  background-color: aqua;
+  background: none;
+  overflow-y: auto;
+  opacity: 10;
+  padding-bottom: 5px;
 }
 /* represent the list title */
 .list-title {
@@ -54,13 +65,20 @@ body {
 /* represent the list item */
 .list-item {
   border-radius: 3px;
-  margin: 3px;
-  padding: 10px;
+  margin: 5px auto;
+  padding: 8px 10px;
   list-style: none;
   background-color: rgb(99, 118, 112);
   box-sizing: border-box;
   height: auto;
 }
+/* add new list item */
+.add-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .add-button {
   color: white;
   text-align: left;
@@ -78,30 +96,50 @@ body {
   background-color: rgb(81, 105, 98);
   transition: 0.9s;
 }
+/* add whole new list */
 #add-list-div {
   min-width: 265px;
   max-width: 265px;
   margin: 50px 3px;
-  padding: 10px 5px;
+  /* padding: 10px 5px; */
   box-sizing: border-box;
   width: 265px;
   height: fit-content;
-  background-color: rgb(34, 56, 49);
-  border-radius: 3px;
+  background-color: inherit;
+  /* background-color: rgb(34, 56, 49); */
+  /* display: none; */
 }
 #add-list-button {
   color: white;
   text-align: left;
   border: none;
-  margin: 3px;
+  /* margin: 3px; */
   padding: 10px;
   list-style: none;
   /* background-color: rgb(219, 223, 222); */
   background-color: inherit;
+  background-color: rgba(34, 56, 49, 0.727);
   box-sizing: border-box;
   height: auto;
+  border-radius: 3px;
 }
-#add-list-div:hover {
-  background-color: rgb(81, 105, 98);
+#add-list-button:hover {
+  background-color: rgb(34, 56, 49);
   transition: 0.9s;
+}
+/* utility classes */
+.none {
+  display: none;
+}
+
+.draggable {
+  cursor: move;
+}
+
+.draggable.dragging {
+  opacity: 0.5;
+}
+
+.hide {
+  display: none;
 }
