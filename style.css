@@ -51,7 +51,7 @@ body {
   background: none;
   overflow-y: auto;
   opacity: 10;
-  padding-bottom: 5px;
+  padding-bottom: 100px;
 }
 /* represent the list title */
 .list-title {
@@ -73,60 +73,60 @@ body {
   height: auto;
 }
 /* add new list item */
-.add-card {
+.add-card-form {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+  background-color: rgb(34, 56, 49);
+  border: rgb(99, 118, 112) 1px solid;
+  border-radius: 3px;
 }
 
-.add-button {
+.add-card-button {
   color: white;
   text-align: left;
-  border-radius: 3px;
   border: none;
+  padding: 5px;
   margin: 3px;
-  padding: 10px;
   list-style: none;
-  /* background-color: rgb(219, 223, 222); */
-  background-color: rgb(34, 56, 49);
+  background-color: inherit;
   box-sizing: border-box;
   height: auto;
 }
-.add-button:hover {
+.add-card-form:hover {
   background-color: rgb(81, 105, 98);
   transition: 0.9s;
 }
 /* add whole new list */
-#add-list-div {
+#add-list-form {
   min-width: 265px;
   max-width: 265px;
   margin: 50px 3px;
-  /* padding: 10px 5px; */
+  padding: 10px;
   box-sizing: border-box;
   width: 265px;
   height: fit-content;
-  background-color: inherit;
-  /* background-color: rgb(34, 56, 49); */
-  /* display: none; */
+  /* background-color: inherit; */
+  background-color: rgb(34, 56, 49);
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center;
+  align-items: center; */
 }
 #add-list-button {
   color: white;
+  border-radius: 3px;
   text-align: left;
   border: none;
-  /* margin: 3px; */
   padding: 10px;
   list-style: none;
-  /* background-color: rgb(219, 223, 222); */
   background-color: inherit;
-  background-color: rgba(34, 56, 49, 0.727);
   box-sizing: border-box;
   height: auto;
-  border-radius: 3px;
 }
-#add-list-button:hover {
-  background-color: rgb(34, 56, 49);
-  transition: 0.9s;
-}
+
 /* utility classes */
 .none {
   display: none;
@@ -140,6 +140,43 @@ body {
   opacity: 0.5;
 }
 
-.hide {
-  display: none;
+/* x button close little input window */
+/* take in the title name or card name */
+#list-input {
+  box-sizing: border-box;
+  border: none;
+  border-radius: 3px;
+  /* width: 10px; */
+  /* margin: 10px 0; */
+  padding: 8px;
+  outline: none;
 }
+
+/* holds both x and submit button */
+div.popUp {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  padding: 5px 0 0 0;
+  /* padding: 20px; */
+  background-color: rgb(34, 56, 49);
+}
+
+#list-submit {
+  background-color: rgb(107, 128, 121);
+  margin: 3px 0;
+  padding: 5px 10px;
+  margin-right: 10px;
+  border-radius: 3px;
+}
+#x {
+  border-radius: 3px;
+  color: rgb(107, 128, 121);
+  font-size: 1.3rem;
+  padding: 2px;
+  border: rgb(107, 128, 121) solid 1px;
+  align-self: center;
+  background-color: inherit;
+}
+/* will submit  */
