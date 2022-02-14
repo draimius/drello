@@ -5,18 +5,18 @@
 // edit text in both list items and list titles
 
 // ============================
-class Kanban {
-  constructor() {}
-  //add new list
-  //add new list item
-  //delete list
-  //delete list item
-  //edit text for target title or list item
+// class Kanban {
+//   constructor() {}
+//   //add new list
+//   //add new list item
+//   //delete list
+//   //delete list item
+//   //edit text for target title or list item
 
-  //*****and i think that pretty much it for all the functionalities really
-}
+//   //*****and i think that pretty much it for all the functionalities really
+// }
 // VARS, EVENTS AND NEW INSTANCE
-const trello = new Kanban();
+// const trello = new Kanban();
 //=====================================================================================
 //=====================================================================================
 //=====================================================================================
@@ -35,104 +35,127 @@ let newCardForm = document.querySelector('#card-input');
 let addCardForms = document.querySelectorAll('.add-card-form');
 let addCardButtons = document.querySelectorAll('.add-card-button');
 let cardContianers = document.querySelectorAll('.item-container');
+
 //used in list creating/inserting and related events
 let newListButton = document.querySelector('#list-submit');
 let newListForm = document.querySelector('#list-input');
 let listXOut = document.querySelector('#x');
-
 //=====================================================================================
 //=====================================================================================
 //=====================================================================================
-
+//the issue is that its not
 //=====================================================================================
 //=====================================================================================
 //=====================================================================================
 //=======hold thing is that only one popUp form should exist at a time never multiple
-//adding item to existing list
 function addCardListener() {
+  //adding item to existing list
+  addCardButtons = document.querySelectorAll('.add-card-button');
+
   addCardButtons.forEach((button) => {
     button.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
       button.classList.add('adding-card');
+
+      updateDynamicVars();
       let addCardForm = button.parentElement;
       let targetList = addCardForm.parentElement.children[1];
-      // console.log(addCardForm); //the form includes button and text input
-      // console.log(targetList); //the ul container list where all item stored
       if (addCardForm.children.length === 1) {
-        const popUpCardInput = document.createElement('form');
+        const popUpCardInput = document.createElement('div');
         popUpCardInput.innerHTML = `
         <input autocomplete="off" placeholder="enter list title" type="text" id="card-input" />
         <div class="popUp">
         </div>`;
         newCardForm = document.querySelector('#card-input');
         addCardForm.appendChild(popUpCardInput);
+        document.querySelector('#card-input').focus();
         updateDynamicVars();
         cardClickOut(addCardForm, button);
-        //after this
-        cardInputKey(targetList, addCardForm);
+        cardInputKey(targetList, newCardForm);
         buttonClickOut(addCardForm, button);
-        newCardForm.focus();
+        triggerOnList(addCardForm);
       }
     });
   });
 }
 
-function cardInputKey(targetList, addCardForm) {
-  newCardForm = document.querySelector('#card-input');
-  newCardForm.addEventListener('keypress', (e) => {
-    console.log('text input keypress event runnint');
-    if (e.keyCode === 13) {
-      e.preventDefault();
-      e.stopPropagation();
+//value of newCard is not
+//================================================
+//================================================
+//================================================
 
-      if (newCardForm.value !== '') {
-        // addListForm.removeChild(form);
-        // addNewCard(newCardForm.value);
-        newCardForm.value = '';
+function cardInputKey(targetList, newCardForm) {
+  //isua that event listener is not aplyting to each dif new input
+  newCardForm = document.querySelectorAll('#card-input');
+  newCardForm.forEach((int) => {
+    int.addEventListener('keypress', (e) => {
+      if (e.keyCode === 13 && int.value !== '') {
+        addNewCard(int.value, targetList);
+        int.value = '';
       }
-    }
+    });
   });
-}
-// function addNewCard(cardText, targetList) {
-//   const card = document.createElement('li');
-//   card.draggable = true;
-//   card.classList.add('list-item');
-//   card.classList.add('draggable');
-//   card.textContent = cardText;
-//   targetList.appendChild(card);
-// }
-function buttonClickOut(addCardForm, button) {
   newCardForm = document.querySelector('#card-input');
+}
 
+//================================================
+function addNewCard(cardText, targetList) {
+  const card = document.createElement('li');
+  card.draggable = true;
+  card.classList.add('list-item');
+  card.classList.add('draggable');
+  card.textContent = cardText;
+  targetList.appendChild(card);
+  updateDynamicVars();
+}
+
+function buttonClickOut(addCardForm, button) {
   addCardButtons.forEach((btn) => {
-    if (btn.classList.length === 1) {
+    if (btn !== button) {
       btn.addEventListener('click', (e) => {
-        e.preventDefault;
-        e.stopPropagation();
+        e.preventDefault();
+        // e.stopPropagation();
+        button.classList = 'add-card-button';
         if (addCardForm.children[1]) {
           addCardForm.children[1].remove();
         }
-        button.classList.remove('adding-card');
+        document.querySelector('#card-input').focus();
       });
+    } else {
+      btn.removeEventListener('click', buttonClickOut, true);
     }
   });
 }
 
 function cardClickOut(addCardForm, button) {
-  newCardForm = document.querySelector('#card-input');
-
   document.querySelector('body').addEventListener('click', (e) => {
     e.preventDefault();
     e.stopPropagation();
-
-    // console.log(otherButtons);
-    if (e.target !== button && e.target !== newCardForm) {
-      if (addCardForm.children.length > 1 && addCardForm.children[1]) {
+    if (
+      e.target !== button &&
+      e.target !== document.querySelector('#card-input')
+    ) {
+      button.classList = 'add-card-button';
+      if (addCardForm.children[1]) {
         addCardForm.children[1].remove();
       }
-      button.classList.remove('adding-card');
-      console.log('CLICK OFF DELETING');
+    }
+  });
+}
+function triggerOnList(addCardForm) {
+  addListButton.addEventListener('click', (e) => {
+    if (e.target === addListButton) {
+      if (addCardForm.children[1]) {
+        addCardForm.children[1].remove();
+      }
+    }
+  });
+  addListForm.addEventListener('click', (e) => {
+    if (e.target === addListForm) {
+      if (addCardForm.children[1]) {
+        addCardForm.children[1].remove();
+      }
     }
   });
 }
@@ -158,12 +181,15 @@ function addNewList(title) {
   <h3 class="list-title">${title}</h3>
   <ul class="item-container">
   </ul>
-  <form class="add-card-form">
+  <div class="add-card-form">
     <button type="button" class="add-card-button">add +</button>
-  </form>
+  </div>
   `;
   frame.insertBefore(newList, addListForm);
+  addCardListener();
   updateDynamicVars();
+  updateDrags();
+  updateDragsContainers();
   newListForm.focus();
   addListForm.scrollIntoView();
 }
@@ -171,11 +197,10 @@ function addNewList(title) {
 //add list button form popUp
 addListButton.addEventListener('click', (e) => {
   if (addListForm.children.length === 1) {
-    console.log('main click popUp event triggered');
     e.preventDefault();
     e.stopPropagation();
 
-    let popUpListInput = document.createElement('form');
+    let popUpListInput = document.createElement('div');
     popUpListInput.innerHTML = `
     <input autocomplete="off" placeholder="enter list title" type="text" id="list-input" />
     <div class="popUp">
@@ -200,7 +225,6 @@ addListButton.addEventListener('click', (e) => {
 function listInputKey(popUpListInput) {
   let newListForm = document.querySelector('#list-input');
   newListForm.addEventListener('keypress', (e) => {
-    console.log('text input keypress event runnint');
     if (e.keyCode === 13) {
       e.preventDefault();
       e.stopPropagation();
@@ -220,7 +244,6 @@ function listButton(popUpListInput) {
     e.preventDefault();
     e.stopPropagation();
 
-    console.log('submit button click event runnint');
     if (newListForm.value !== '') {
       // addListForm.removeChild(form);
       addNewList(newListForm.value);
@@ -240,7 +263,6 @@ function listXButton(popUpListInput) {
     if (popUpListInput !== null) {
       addListForm.removeChild(popUpListInput);
       popUpListInput = null;
-      console.log('X BUTTON DELETING');
     }
   });
 }
@@ -285,15 +307,15 @@ function updateDynamicVars() {
   addCardButtons = document.querySelectorAll('.add-card-button');
   addCardForms = document.querySelectorAll('.add-card-form');
   cardContianers = document.querySelectorAll('.item-container');
-  updateDrags();
-  updateDragsContainers();
+  // updateDrags();
+  // updateDragsContainers();
   newListButton = document.querySelector('#list-submit');
   newListForm = document.querySelector('#list-input');
+  // addCardListener();
   listXOut = document.querySelector('#x');
-  addCardListener();
-  newCardForm = document.querySelector('#card-input');
-  draggables = document.querySelectorAll('.draggable');
-  dragCointainers = document.querySelectorAll('.item-container');
+  // newCardForm = document.querySelector('#card-input');
+  // draggables = document.querySelectorAll('.draggable');
+  // dragCointainers = document.querySelectorAll('.item-container');
 }
 
 //=====================================================================================
@@ -318,8 +340,6 @@ let dragCointainers = document.querySelectorAll('.item-container');
 function updateDrags() {
   // function dragEvents(draggables, dragCointainers) {
   //=============================================
-  // console.log(dragCointainers);
-  // console.log(draggables);
   //listen for drag on item
   draggables.forEach((item) => {
     item.addEventListener('dragstart', (e) => {
@@ -347,11 +367,10 @@ function updateDragsContainers() {
       //if do target can grab things other then item and create issues
       const dragItem = document.querySelector('.dragging');
       //if exist drop before elements else just in container
+      console.log(dragItem);
       if (afterElement === null) {
         container.appendChild(dragItem);
       } else {
-        console.log(dragItem);
-        console.log(afterElement);
         container.insertBefore(dragItem, afterElement);
       }
     });
